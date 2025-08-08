@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 23:04:38 by swied             #+#    #+#             */
-/*   Updated: 2025/08/08 16:21:11 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/08 17:58:58 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,18 @@ int			execute_pipes(t_cmd_list *cmd_list, t_env_list *env_list);
 void		close_pipes(t_cmd_list *cmd_list, t_cmd_node *current, int *pipefd, int i);
 void		setup_pipes(t_cmd_list *cmd_list, int *pipefd, int i);
 
+//heredoc_list.c
+int				create_hd_list(t_cmd_list *cmd_list);
+int	create_hd(char *lim, t_cmd_node *cmd_node, t_file_node *file_node);
+t_hd_node	*create_hd_node(char *lim);
+int create_child_for_hd(char *del, t_hd_node *hd_node);
+int	get_input_from_user(char *del, int write_fd);
+int	store_from_input(t_hd_node *hd_node, int read_fd);
+void	add_line_to_hd_node(t_hd_node *hd_node, char *line);
+t_hd_line	*create_hd_line(char *content);
+
 //heredoc_utils.c
+int	is_delimiter(char *line, char *del);
 
 //garbage.c
 int				gc_free(void *ptr);
