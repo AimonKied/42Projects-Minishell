@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 01:39:48 by swied             #+#    #+#             */
-/*   Updated: 2025/08/08 18:30:04 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/08 20:52:07 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void	add_line_to_hd_node(t_hd_node *hd_node, char *line)
 	current->next = new_line;
 }
 
-/* creates and allocates a hd_line and fills the argument */
+/* creates and allocates a hd_line and fills it with the argument */
 t_hd_line	*create_hd_line(char *content)
 {
 	t_hd_line	*new_line;

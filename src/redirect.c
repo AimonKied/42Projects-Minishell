@@ -1,23 +1,20 @@
-/* ************************************************************************** */
-/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 19:44:30 by swied             #+#    #+#             */
-/*   Updated: 2025/08/06 19:47:49 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/09 16:18:37 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
 
-/* Open every redirect and set fd_infile or fd_outfile | Gets overwritten when multiple redirects */
-int open_redirects(t_cmd_node *cmd_node)
+/* gives fd_infile the infile fd and heredoc fd */
+int	open_infile(t_cmd_node *cmd_node)
 {
-	t_file_node *current;
+	t_file_node	*current;
 	current = cmd_node->file->head;
-	check_fd(cmd_node);
 	while (current)
 	{
 		if (current->redir_type == REDIR_IN)
@@ -26,7 +23,26 @@ int open_redirects(t_cmd_node *cmd_node)
 			if (cmd_node->file->fd_infile == -1)
 				return (perror(current->filename), 1);
 		}
-		else if (current->redir_type == REDIR_OUT)
+		else if (current->redir_type == REDIR_HEREDOC)
+		{
+			// cmd_node->file->fd_infile = handle_heredoc();
+			if (cmd_node->file->fd_infile == -1)
+				return (printf("handle heredoc\n"), 1);
+				// return (perror("heredoc"), 1);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
+/* gives fd_outfile the outfile fds and append */
+int	open_outfile(t_cmd_node *cmd_node)
+{
+	t_file_node *current;
+	current = cmd_node->file->head;
+	while (current)
+	{
+		if (current->redir_type == REDIR_OUT)
 		{
 			cmd_node->file->fd_outfile = open(current->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if (cmd_node->file->fd_outfile == -1)
@@ -38,14 +54,19 @@ int open_redirects(t_cmd_node *cmd_node)
 			if (cmd_node->file->fd_outfile == -1)
 				return (perror(current->filename), 1);
 		}
-		else if (current->redir_type == REDIR_HEREDOC)
-		{
-			cmd_node->file->fd_infile = open(current->filename, O_RDONLY);
-			if (cmd_node->file->fd_infile == -1)
-				return(perror(current->filename), 1);
-		}
 		current = current->next;
 	}
+	return (0);
+}
+
+/* Open every redirect and set fd_infile or fd_outfile | Gets overwritten when multiple redirects */
+int open_redirects(t_cmd_node *cmd_node)
+{
+	check_fd(cmd_node);
+	if (open_infile(cmd_node))
+		return (1);
+	if (open_outfile(cmd_node))
+		return (1);
 	return (0);
 }
 

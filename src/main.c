@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:42:42 by swied             #+#    #+#             */
-/*   Updated: 2025/08/08 18:24:56 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/09 20:18:06 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,25 @@ void	cmd_init2(t_cmd_node *cmd_node)
 	cmd_node->hd_list = NULL;
 
 	cmd_node->file = gc_malloc(sizeof(t_file_list));
-	cmd_node->file->size = 1;
+	cmd_node->file->size = 3;
 	// cmd_node->file->head = NULL;
 	cmd_node->file->fd_infile = -1;
 	cmd_node->file->fd_outfile = -1;
 	t_file_node *infile1 = malloc(sizeof(t_file_node));
-	// t_file_node *infile2 = malloc(sizeof(t_file_node));
+	t_file_node *infile2 = malloc(sizeof(t_file_node));
+	t_file_node *infile3 = malloc(sizeof(t_file_node));
 	
 	cmd_node->file->head = infile1; 
-	cmd_node->file->tail = infile1;
-	infile1->next = NULL;
+	cmd_node->file->tail = infile3;
+	infile1->next = infile2;
+	infile2->next = infile3;
+	infile3->next = NULL;
 	infile1->filename = "EOF";
-	// infile2->filename = "infile2";
+	infile2->filename = "EOF2";
+	infile3->filename = "EOF3";
 	infile1->redir_type = REDIR_HEREDOC;
-	// infile2->redir_type = REDIR_IN;
+	infile2->redir_type = REDIR_HEREDOC;
+	infile3->redir_type = REDIR_HEREDOC;
 }
 
 void	cmd_init3(t_cmd_node *cmd_node)
@@ -142,7 +147,19 @@ int	main(int argc, char **argv, char **envp)
 	t_env_list *env_list;
 	env_list = fill_env_list(envp);
 	create_hd_list(cmd_list);
-	// status = execute_loop(cmd_list, env_list);
+	// t_cmd_node	*current;
+	// current = cmd_list->head;
+	// t_hd_node *current_hd = current->hd_list->head;
+	// while (current_hd)
+	// {
+	// 	while (current_hd->lines)
+	// 	{
+	// 		printf("Heredoc-inhalt: %s\n", current_hd->lines->line);
+	// 		current_hd->lines = current_hd->lines->next;
+	// 	}
+	// 	current_hd = current_hd->next;
+	// }
+	status = execute_loop(cmd_list, env_list);
 	free_all_garbage();
 	return (status);
 }
