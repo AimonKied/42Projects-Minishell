@@ -25,10 +25,9 @@ int	open_infile(t_cmd_node *cmd_node)
 		}
 		else if (current->redir_type == REDIR_HEREDOC)
 		{
-			// cmd_node->file->fd_infile = handle_heredoc();
+			cmd_node->file->fd_infile = get_heredoc(cmd_node);
 			if (cmd_node->file->fd_infile == -1)
-				return (printf("handle heredoc\n"), 1);
-				// return (perror("heredoc"), 1);
+				return (perror("heredoc"), 1);
 		}
 		current = current->next;
 	}

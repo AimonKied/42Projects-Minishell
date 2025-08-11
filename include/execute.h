@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 23:04:38 by swied             #+#    #+#             */
-/*   Updated: 2025/08/08 17:58:58 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/11 13:36:04 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,69 +25,73 @@
 # include "minishell.h"
 
 //execute_utils.c
-int		ft_strcmp(const char *s1, const char *s2);
+int				ft_strcmp(const char *s1, const char *s2);
 
 //builtins
-int		builtin_pwd(void);
-int		builtin_echo(char **args);
-int		builtin_cd(char **args, t_env_list *env_list);
-int		builtin_env(t_env_list *env_list);
-int		builtin_exit(void);
-int		builtin_export(t_env_list *env_list, t_cmd_node *cmd_node);
+int				builtin_pwd(void);
+int				builtin_echo(char **args);
+int				builtin_cd(char **args, t_env_list *env_list);
+int				builtin_env(t_env_list *env_list);
+int				builtin_exit(void);
+int				builtin_export(t_env_list *env_list, t_cmd_node *cmd_node);
 
 //env.c
-int		update_env_var(char ***env, char *key, char *value);
-int		add_env_var(t_env_list *env_list, char *var, char *val);
-int		print_env(t_env_list *env_list);
-char	*get_env_value(t_env_list *env_list, char *var);
-int		set_env_var(t_env_list *env_list, char *var, char *val);
+int				update_env_var(char ***env, char *key, char *value);
+int				add_env_var(t_env_list *env_list, char *var, char *val);
+int				print_env(t_env_list *env_list);
+char			*get_env_value(t_env_list *env_list, char *var);
+int				set_env_var(t_env_list *env_list, char *var, char *val);
 
 //export.c
-void		print_export(t_env_list *env_list);
+void			print_export(t_env_list *env_list);
 
 //env_list.c
-t_env_list	*fill_env_list(char **envp);
+t_env_list		*fill_env_list(char **envp);
 
 //list_to_dblarray.c
-char		**list_to_dblarray(t_env_list *env_list);
-int			create_env(char *var, char *value, char **array, int i);
-char		**free_env_array(char **array, int i);
+char			**list_to_dblarray(t_env_list *env_list);
+int				create_env(char *var, char *value, char **array, int i);
+char			**free_env_array(char **array, int i);
 
 //get_path.c
-char		*get_total_path(char **envp);
-char		*get_correct_path_second(char **path_array, char *suffix);
-char		*get_correct_path(char *cmd, char **envp);
+char			*get_total_path(char **envp);
+char			*get_correct_path_second(char **path_array, char *suffix);
+char			*get_correct_path(char *cmd, char **envp);
 
 //builtin.c
-int			execute_builtin(t_cmd_node *cmd_node, t_env_list *env_list);
+int				execute_builtin(t_cmd_node *cmd_node, t_env_list *env_list);
 
 //execute.c
-int			execute_cmd(t_cmd_node *cmd_node, t_env_list *env_list);
-int			execute_cmd_or_builtin(t_cmd_node *cmd_node, t_env_list *env_list);
-int			execute_loop(t_cmd_list *cmd_list, t_env_list *env_list);
+int				execute_cmd(t_cmd_node *cmd_node, t_env_list *env_list);
+int				execute_cmd_or_builtin(t_cmd_node *cmd_node, t_env_list *env_list);
+int				execute_loop(t_cmd_list *cmd_list, t_env_list *env_list);
 
 //redirect.c
-int 		redirect(t_cmd_node *cmd_node);
-int			open_redirects(t_cmd_node *cmd_node);
-void		check_fd(t_cmd_node *cmd_node);
+int 			redirect(t_cmd_node *cmd_node);
+int				open_redirects(t_cmd_node *cmd_node);
+void			check_fd(t_cmd_node *cmd_node);
 
 //pipes.c
-int			execute_pipes(t_cmd_list *cmd_list, t_env_list *env_list);
-void		close_pipes(t_cmd_list *cmd_list, t_cmd_node *current, int *pipefd, int i);
-void		setup_pipes(t_cmd_list *cmd_list, int *pipefd, int i);
+int				execute_pipes(t_cmd_list *cmd_list, t_env_list *env_list);
+void			close_pipes(t_cmd_list *cmd_list, t_cmd_node *current, int *pipefd, int i);
+void			setup_pipes(t_cmd_list *cmd_list, int *pipefd, int i);
 
 //heredoc_list.c
 int				create_hd_list(t_cmd_list *cmd_list);
-int	create_hd(char *lim, t_cmd_node *cmd_node, t_file_node *file_node);
-t_hd_node	*create_hd_node(char *lim);
-int create_child_for_hd(char *del, t_hd_node *hd_node);
-int	get_input_from_user(char *del, int write_fd);
-int	store_from_input(t_hd_node *hd_node, int read_fd);
-void	add_line_to_hd_node(t_hd_node *hd_node, char *line);
-t_hd_line	*create_hd_line(char *content);
+int				create_hd(char *lim, t_cmd_node *cmd_node, t_file_node *file_node);
+t_hd_node		*create_hd_node(char *lim);
+int 			create_child_for_hd(char *del, t_hd_node *hd_node);
+int				get_input_from_user(char *del, int write_fd);
+int				store_from_input(t_hd_node *hd_node, int read_fd);
+void			add_line_to_hd_node(t_hd_node *hd_node, char *line);
+t_hd_line		*create_hd_line(char *content);
 
 //heredoc_utils.c
-int	is_delimiter(char *line, char *del);
+int				is_delimiter(char *line, char *del);
+
+//heredoc_execute.c
+int				get_heredoc(t_cmd_node *cmd_node);
+void			fill_pipe_from_list(t_cmd_node *cmd_node, int write_fd);
 
 //garbage.c
 int				gc_free(void *ptr);
