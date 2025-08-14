@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:42:42 by swied             #+#    #+#             */
-/*   Updated: 2025/08/14 20:01:47 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/14 23:39:53 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	cmd_init1(t_cmd_node *cmd_node)
 {
-	cmd_node->cmd = gc_malloc(sizeof(char *) * 3);
-	cmd_node->cmd[0] = "unset";
-	cmd_node->cmd[1] = "USER";
+	cmd_node->cmd = gc_malloc(sizeof(char *) * 4);
+	cmd_node->cmd[0] = "exit";
+	cmd_node->cmd[1] = "123";
+	// cmd_node->cmd[2] = "def";
 	cmd_node->cmd[2] = NULL;
 	cmd_node->cmd_type = 1;
 
@@ -128,7 +129,7 @@ int	main(int argc, char **argv, char **envp)
 	// cmd_init2(cmd_node4);
 
 	cmd_list->head = cmd_node1;
-	// cmd_list->tail = cmd_node2;
+	cmd_list->tail = cmd_node1;
 	// cmd_node1->next = cmd_node2;
 	cmd_node1->next = NULL;
 	// cmd_node3->next = cmd_node4;
@@ -139,23 +140,23 @@ int	main(int argc, char **argv, char **envp)
 	env_list = fill_env_list(envp);
 	create_hd_list(cmd_list);
 
-	t_env_node	*current = env_list->head;
-	while (current)
-	{
-		printf("%s=%s\n", current->variable, current->value);
-		current = current->next;
-	}
+	// t_env_node	*current = env_list->head;
+	// while (current)
+	// {
+	// 	printf("%s=%s\n", current->variable, current->value);
+	// 	current = current->next;
+	// }
 
 	status = execute_loop(cmd_list, env_list);
 
-	printf("\n ------ \n\n");
+	// printf("\n ------ \n\n");
 
-	current = env_list->head;
-	while (current)
-	{
-		printf("%s=%s\n", current->variable, current->value);
-		current = current->next;
-	}
+	// current = env_list->head;
+	// while (current)
+	// {
+	// 	printf("%s=%s\n", current->variable, current->value);
+	// 	current = current->next;
+	// }
 	
 	free_all_garbage();
 	return (status);
