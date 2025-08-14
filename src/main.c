@@ -6,7 +6,7 @@
 /*   By: swied <swied@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:42:42 by swied             #+#    #+#             */
-/*   Updated: 2025/08/09 20:18:06 by swied            ###   ########.fr       */
+/*   Updated: 2025/08/14 20:01:47 by swied            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	cmd_init1(t_cmd_node *cmd_node)
 {
 	cmd_node->cmd = gc_malloc(sizeof(char *) * 3);
-	cmd_node->cmd[0] = "export";
-	// cmd_node->cmd[1] = "test";
-	cmd_node->cmd[1] = NULL;
+	cmd_node->cmd[0] = "unset";
+	cmd_node->cmd[1] = "USER";
+	cmd_node->cmd[2] = NULL;
 	cmd_node->cmd_type = 1;
 
 	cmd_node->file = gc_malloc(sizeof(t_file_list));
@@ -38,28 +38,19 @@ void	cmd_init2(t_cmd_node *cmd_node)
 	cmd_node->cmd[0] = "cat";
 	cmd_node->cmd[1] = NULL;
 	cmd_node->cmd_type = 0;
-	cmd_node->hd_list = NULL;
-
+	// cmd_node->hd_list = NULL;
 	cmd_node->file = gc_malloc(sizeof(t_file_list));
-	cmd_node->file->size = 3;
-	// cmd_node->file->head = NULL;
+	cmd_node->file->size = 0;
+	cmd_node->file->head = NULL;
 	cmd_node->file->fd_infile = -1;
 	cmd_node->file->fd_outfile = -1;
-	t_file_node *infile1 = malloc(sizeof(t_file_node));
-	t_file_node *infile2 = malloc(sizeof(t_file_node));
-	t_file_node *infile3 = malloc(sizeof(t_file_node));
+	// t_file_node *infile1 = malloc(sizeof(t_file_node));
 	
-	cmd_node->file->head = infile1; 
-	cmd_node->file->tail = infile3;
-	infile1->next = infile2;
-	infile2->next = infile3;
-	infile3->next = NULL;
-	infile1->filename = "EOF";
-	infile2->filename = "EOF2";
-	infile3->filename = "EOF3";
-	infile1->redir_type = REDIR_HEREDOC;
-	infile2->redir_type = REDIR_HEREDOC;
-	infile3->redir_type = REDIR_HEREDOC;
+	cmd_node->file->head = NULL;
+	cmd_node->file->tail = NULL;
+	// infile1->next = NULL;
+	// infile1->filename = "EOF";
+	
 }
 
 void	cmd_init3(t_cmd_node *cmd_node)
@@ -130,16 +121,16 @@ int	main(int argc, char **argv, char **envp)
 	// t_cmd_node	*cmd_node3 = malloc(sizeof(t_cmd_node));
 	// t_cmd_node	*cmd_node4 = malloc(sizeof(t_cmd_node));
 
-	cmd_init2(cmd_node1);
-	// cmd_init3(cmd_node2);
+	cmd_init1(cmd_node1);
+	// cmd_init1(cmd_node2);
 	// cmd_init2(cmd_node3);
 	// cmd_init5(cmd_node4);
 	// cmd_init2(cmd_node4);
 
 	cmd_list->head = cmd_node1;
-	cmd_list->tail = cmd_node1;
+	// cmd_list->tail = cmd_node2;
+	// cmd_node1->next = cmd_node2;
 	cmd_node1->next = NULL;
-	// cmd_node2->next = cmd_node3;
 	// cmd_node3->next = cmd_node4;
 	// cmd_list->tail = cmd_node2;
 	cmd_list->size = 1;
@@ -147,19 +138,25 @@ int	main(int argc, char **argv, char **envp)
 	t_env_list *env_list;
 	env_list = fill_env_list(envp);
 	create_hd_list(cmd_list);
-	// t_cmd_node	*current;
-	// current = cmd_list->head;
-	// t_hd_node *current_hd = current->hd_list->head;
-	// while (current_hd)
-	// {
-	// 	while (current_hd->lines)
-	// 	{
-	// 		printf("Heredoc-inhalt: %s\n", current_hd->lines->line);
-	// 		current_hd->lines = current_hd->lines->next;
-	// 	}
-	// 	current_hd = current_hd->next;
-	// }
+
+	t_env_node	*current = env_list->head;
+	while (current)
+	{
+		printf("%s=%s\n", current->variable, current->value);
+		current = current->next;
+	}
+
 	status = execute_loop(cmd_list, env_list);
+
+	printf("\n ------ \n\n");
+
+	current = env_list->head;
+	while (current)
+	{
+		printf("%s=%s\n", current->variable, current->value);
+		current = current->next;
+	}
+	
 	free_all_garbage();
 	return (status);
 }
